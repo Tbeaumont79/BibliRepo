@@ -44,14 +44,11 @@
             <li>
               <a href="#plans" class="text-sm/6 font-semibold text-gray-900">Our Plans</a>
             </li>
-            <li>
-              <a href="#" class="text-sm/6 font-semibold text-gray-900">Contact Us</a>
-            </li>
           </ul>
         </nav>
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        <a href="./src/login.php" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
       </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
