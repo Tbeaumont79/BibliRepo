@@ -14,6 +14,8 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             header('Location: ../index.php');
             exit;
         }
+    } else {
+        throw new Exception("Invalid email or password");
     }
 }
 ?>
