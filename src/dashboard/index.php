@@ -1,13 +1,3 @@
-<?php
-
-session_start();
-
-if (!isset($_SESSION['email'])) {
-    header('Location: ./src/login.php');
-    exit;
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,6 +7,6 @@ if (!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
-
+    
 </body>
 </html>
