@@ -1,14 +1,33 @@
 <?php
 require('./databases/db_connect.php');
 
-$smt = $connect->query("SELECT * FROM book");
-if ($smt->num_rows > 0) {
-    $books = $smt->fetch_assoc();
+$stmt = $connect->query("SELECT * FROM book");
+if ($stmt->num_rows > 0) {
+  $books = [];
+  for ( $i = 0; $i < $stmt->num_rows; $i++) {
+    array_push($books,$stmt->fetch_assoc());
+  }
 }
-
-function addBook()
+if (isset($_POST['create'])) {
+    $books.array_push(addBook($connect));
+}
+function addBook($connect)
 {
+    if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
+        print_r("je passe ici 1");
+        $title = $_POST['title'];
+        $author = $_POST['author'];
+        $category = $_POST['category'];
 
+        $stmt = $connect->query('INSERT INTO book (title, author, category) VALUES ("' . $title . '", "' . $author . '", "' . $category . '")');
+
+        if ($stmt->num_rows > 0) {
+            $books = $stmt->fetch_assoc();
+            return $books;
+        }
+    }
+
+    return throw new Exception("Error adding a book in the Database");
 }
 ?>
 
@@ -21,7 +40,7 @@ function addBook()
     <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-    <main class="p-10">
+  <main class="p-10">
 
 <div class="px-4 sm:px-6 lg:px-8">
   <div class="sm:flex sm:items-center">
@@ -29,11 +48,9 @@ function addBook()
       <h1 class="text-base font-semibold text-gray-900">Books</h1>
       <p class="mt-2 text-sm text-gray-700">A list of all books in your Database including their id, title, author and category.</p>
     </div>
-    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-      <button type="button" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add book</button>
-    </div>
+
   </div>
-  <div class="mt-8 flow-root">
+    <div class="mt-8 flow-root">
     <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
         <table class="min-w-full divide-y divide-gray-300">
@@ -84,15 +101,29 @@ function addBook()
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 bg-white">
+           <?php
+            for ($i = 0; $i < count($books);  $i++) {
+                ?>
             <tr>
-            <?php foreach ($books as $book) {  ?>
-              <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $book ?></td>
-             
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['id'] ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['title'] ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['author'] ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['category'] ?></td>
+              <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
+                  <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                </td>
+              </tr>
+          
             <?php } ?>
-            <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit<span class="sr-only">, Lindsay Walton</span></a>
-              </td>
-            </tr>
+            <tr>
+                <form action="book.php" method="POST">
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $i + 1?></td>
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/></td>
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/></td>
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category"/></td>
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><button type="submit" name="create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add book</button></td> 
+                </form>
+              </tr>
             <!-- More people... -->
           </tbody>
         </table>
