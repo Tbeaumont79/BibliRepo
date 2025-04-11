@@ -40,9 +40,9 @@ if (isset($_POST['delete']) && isset($_POST['book_id'])) {
 
 function updateBook($connect) {
   $id = intval($_POST['book_id']);
-  $title = $_POST['title'];
-  $author = $_POST['author'];
-  $category = $_POST['category'];
+  $title = htmlspecialchars($_POST['title']);
+  $author = htmlspecialchars($_POST['author']);
+  $category = htmlspecialchars($_POST['category']);
 
   $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
   $stmt->bind_param("sssi", $title, $author, $category, $id);
@@ -66,10 +66,9 @@ function deleteBook($connect)
 function addBook($connect)
 {
     if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
-        $title = $_POST['title'];
-        $author = $_POST['author'];
-        $category = $_POST['category'];
-
+        $title = htmlspecialchars($_POST['title']);
+        $author = htmlspecialchars($_POST['author']);
+        $category = htmlspecialchars($_POST['category']);
         $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
         $stmt->bind_param("sss", $title, $author, $category);
         $result = $stmt->execute();

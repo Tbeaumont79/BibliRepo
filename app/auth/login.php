@@ -4,8 +4,8 @@ require_once('./app/databases/db_connect.php');
 session_start();
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
 
     $user = $connect->query('SELECT * FROM users WHERE email = "' . $email . '"');
     if ($user->num_rows > 0) {

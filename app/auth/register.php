@@ -2,9 +2,9 @@
 require('../databases/db_connect.php');
 
 if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $email = htmlspecialchars($_POST['email']);
+    $password = htmlspecialchars($_POST['password']);
+    $confirm_password = htmlspecialchars($_POST['confirm_password']);
     if ($password !== $confirm_password) {
         throw new Exception("Passwords do not match");
     }
