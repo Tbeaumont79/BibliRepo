@@ -2,22 +2,23 @@
 require('../databases/db_connect.php');
 
 if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
-    $confirm_password = htmlspecialchars($_POST['confirm_password']);
-    if ($password !== $confirm_password) {
-        throw new Exception("Passwords do not match");
-    }
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $connect->query('INSERT INTO users (email, password) VALUES ("' . $email . '", "' . $hashed_password . '")');
-    session_start();
-    header('Location: ./index.php');
-    exit;
+  $email = htmlspecialchars($_POST['email']);
+  $password = htmlspecialchars($_POST['password']);
+  $confirm_password = htmlspecialchars($_POST['confirm_password']);
+  if ($password !== $confirm_password) {
+    throw new Exception("Passwords do not match");
+  }
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  $connect->query('INSERT INTO users (email, password) VALUES ("' . $email . '", "' . $hashed_password . '")');
+  session_start();
+  header('Location: ./index.php');
+  exit;
 }
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,9 +26,10 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <title></title>
 </head>
+
 <body>
   <main>
-      <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <img class="mx-auto h-10 w-auto" src="../assets/icons/bookLogo.svg" alt="Biblirepo">
         <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
@@ -71,4 +73,5 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     </div>
   </main>
 </body>
+
 </html>

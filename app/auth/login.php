@@ -4,34 +4,36 @@ require_once('./app/databases/db_connect.php');
 session_start();
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
-    $email = htmlspecialchars($_POST['email']);
-    $password = htmlspecialchars($_POST['password']);
+  $email = htmlspecialchars($_POST['email']);
+  $password = htmlspecialchars($_POST['password']);
 
-    $user = $connect->query('SELECT * FROM users WHERE email = "' . $email . '"');
-    if ($user->num_rows > 0) {
-        $user = $user->fetch_assoc();
-        if (password_verify($password, $user['password'])) {
-            $_SESSION['email'] = $email;
-            header('Location: ../index.php');
-            exit;
-        }
-    } else {
-        throw new Exception("Invalid email or password");
+  $user = $connect->query('SELECT * FROM users WHERE email = "' . $email . '"');
+  if ($user->num_rows > 0) {
+    $user = $user->fetch_assoc();
+    if (password_verify($password, $user['password'])) {
+      $_SESSION['email'] = $email;
+      header('Location: ../index.php');
+      exit;
     }
+  } else {
+    throw new Exception("Invalid email or password");
+  }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../styles/style.css">
   <title>Document</title>
 </head>
+
 <body>
-    <main>
-      <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <main>
+    <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <img class="mx-auto h-10 w-auto" src="../../partials/assets/icons/bookLogo.svg" alt="Biblirepo">
         <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
@@ -68,4 +70,5 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     </div>
   </main>
 </body>
+
 </html>

@@ -127,7 +127,6 @@
                 <div class="mt-6">
                   <p class="text-sm text-gray-500">Poche</p>
                   <h3 class="mt-1 font-semibold text-gray-900">
-
                     <a href="#">
                       <span class="absolute inset-0"></span>
                       La Femme De Ménage
@@ -161,7 +160,6 @@
               </div>
             </li>
           </ul>
-
           <ul role="list" class="mx-4 my-4">
             <li class="flex w-64 text-center lg:w-auto">
               <div class="group relative">
@@ -174,7 +172,6 @@
                       Arcane - League Of Legends
                     </a>
                   </h3>
-
                   <div class="flex items-center justify-center gap-x-8">
                     <p class="mt-1 text-gray-900">$10</p>
                     <a href="#" class="rounded-md font-roboto px-2 py-1 text-sm font-semibold text-indigo-500 hover:bg-indigo-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Buy now <span aria-hidden="true">→</span></a>
@@ -588,4 +585,5 @@
     </div>
   </footer>
 </body>
+
 </html>
