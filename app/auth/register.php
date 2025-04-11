@@ -1,5 +1,5 @@
 <?php
-require('../databases/db_connect.php');
+require('./app/databases/db_connect.php');
 
 if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
   $email = htmlspecialchars($_POST['email']);
@@ -23,7 +23,6 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../styles/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <title></title>
 </head>
 
@@ -31,7 +30,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
   <main>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img class="mx-auto h-10 w-auto" src="../assets/icons/bookLogo.svg" alt="Biblirepo">
+        <img class="mx-auto h-10 w-auto" src="/assets/icons/bookLogo.svg" alt="Biblirepo">
         <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
       </div>
 
