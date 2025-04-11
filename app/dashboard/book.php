@@ -1,16 +1,12 @@
 <?php
-require('./databases/db_connect.php');
-$books = [];
-$is_fetched = false;
-if ($is_fetched == false) {
-    $books = loadBook($connect);
-    $is_fetched = true;
-}
+require_once('./app/databases/db_connect.php');
+$books = loadBook($connect);
+$edit = false;
 function loadBook($connect)
 {
     $books = [];
     $stmt = $connect->query("SELECT * FROM book");
-    if ($stmt->num_rows > 0) {
+    if ($stmt && $stmt->num_rows > 0) {
         for ($i = 0; $i < $stmt->num_rows; $i++) {
             array_push($books, $stmt->fetch_assoc());
         }
@@ -23,20 +19,49 @@ if (isset($_POST['create'])) {
     $books = loadBook($connect);
 
 }
+if (isset($_POST['edit']) && isset($_POST['book_id'])) {
+    $books = [];
+    $edit = !$edit;
+    $books = loadBook($connect);
+}
+if (isset($_POST['save']) && isset($_POST['book_id'])) {
+    $books = [];
+    $edit = false;
+    updateBook($connect);
+    $books = loadBook($connect);  
+}
 
 if (isset($_POST['delete']) && isset($_POST['book_id'])) {
     $books = [];
     deleteBook($connect);
     $books = loadBook($connect);
 }
+
+
+function updateBook($connect) {
+  $id = intval($_POST['book_id']);
+  $title = $_POST['title'];
+  $author = $_POST['author'];
+  $category = $_POST['category'];
+
+  $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
+  $stmt->bind_param("sssi", $title, $author, $category, $id);
+  $result = $stmt->execute();
+  if (!$result) {
+      throw new Exception("Error updating book in databases: " . $connect->error);
+  }
+  $stmt->close();
+}
 function deleteBook($connect)
 {
-    $id = $_POST['book_id'];
-    $stmt = $connect->query("DELETE FROM book WHERE book.id = " . $id . "");
-    if (!$stmt) {
-        throw new Exception("Error deleting book in databases");
+    $id = intval($_POST['book_id']);
+    $stmt = $connect->prepare("DELETE FROM book WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $result = $stmt->execute();
+    if (!$result) {
+        throw new Exception("Error deleting book in databases: " . $connect->error);
     }
-
+    $stmt->close();
 }
 function addBook($connect)
 {
@@ -45,10 +70,13 @@ function addBook($connect)
         $author = $_POST['author'];
         $category = $_POST['category'];
 
-        $stmt = $connect->query('INSERT INTO book (title, author, category) VALUES ("' . $title . '", "' . $author . '", "' . $category . '")');
-        if (!$stmt) {
-            throw new Exception("Error adding book in database");
+        $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $title, $author, $category);
+        $result = $stmt->execute();
+        if (!$result) {
+            throw new Exception("Error adding book in database: " . $connect->error);
         }
+        $stmt->close();
     }
 }
 ?>
@@ -59,10 +87,12 @@ function addBook($connect)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="../../styles/style.css">
 </head>
 <body>
-  <main class="p-10">
+  
+<main class="p-10">
 
 <div class="px-4 sm:px-6 lg:px-8">
   <div class="sm:flex sm:items-center">
@@ -125,26 +155,28 @@ function addBook($connect)
                for ($i = 0; $i < count($books);  $i++) {
                    ?>
             <tr>
+            <form action="book.php" method="POST">
                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['id'] ?></td>
-                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['title'] ?></td>
-                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['author'] ?></td>
-                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['category'] ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $books[$i]['title'];  ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $books[$i]['author']; ?></td>
+                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category"/>' : $books[$i]['category']; ?></td>
                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                   <th scope="col" class="relative py-3.5 pr-0 pl-3">
-                    <form action="book.php" method="POST">
+                      <span class="sr-only">Edit</span>
+                      <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
+                      <?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                       <span class="sr-only">Delete</span>
                       <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
                       <button type="submit" class="text-indigo-600 hover:text-indigo-900" name="delete">Delete</button>
-                    </form>
                   </th>
                 </td>
+            </form>
               </tr>
           
-            <?php }
-               } ?>
+            <?php }} ?>
             <tr>
                 <form action="book.php" method="POST">
-                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo "id" ?></td>
+                  <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo 'id'; ?></td>
                   <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/></td>
                   <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/></td>
                   <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category"/></td>

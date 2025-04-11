@@ -2,10 +2,6 @@
 
 session_start();
 
-if (!isset($_SESSION['email'])) {
-    header('Location: ./src/login.php');
-    exit;
-}
 
 ?>
 <!DOCTYPE html>
@@ -15,6 +11,7 @@ if (!isset($_SESSION['email'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./styles/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
 <div class="bg-white">
