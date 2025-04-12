@@ -1,83 +1,83 @@
 <?php
 require_once('./app/databases/db_connect.php');
-$books = loadBook($connect);
+$users = loadusers($connect);
 $edit = false;
-function loadBook($connect)
+function loadusers($connect)
 {
-    $books = [];
-    $stmt = $connect->query("SELECT * FROM book");
+    $users = [];
+    $stmt = $connect->query("SELECT * FROM users;");
     if ($stmt && $stmt->num_rows > 0) {
         for ($i = 0; $i < $stmt->num_rows; $i++) {
-            array_push($books, $stmt->fetch_assoc());
+            array_push($users, $stmt->fetch_assoc());
         }
     }
-    return $books;
+    return $users;
 }
-if (isset($_POST['create'])) {
-    $books = [];
-    addBook($connect);
-    $books = loadBook($connect);
-}
-if (isset($_POST['edit']) && isset($_POST['book_id'])) {
-    $books = [];
-    $edit = !$edit;
-    $books = loadBook($connect);
-}
-if (isset($_POST['save']) && isset($_POST['book_id'])) {
-    $books = [];
-    $edit = false;
-    updateBook($connect);
-    $books = loadBook($connect);
-}
+// if (isset($_POST['create'])) {
+//     $books = [];
+//     addBook($connect);
+//     $books = loadBook($connect);
+// }
+// if (isset($_POST['edit']) && isset($_POST['book_id'])) {
+//     $books = [];
+//     $edit = !$edit;
+//     $books = loadBook($connect);
+// }
+// if (isset($_POST['save']) && isset($_POST['book_id'])) {
+//     $books = [];
+//     $edit = false;
+//     updateBook($connect);
+//     $books = loadBook($connect);
+// }
 
-if (isset($_POST['delete']) && isset($_POST['book_id'])) {
-    $books = [];
-    deleteBook($connect);
-    $books = loadBook($connect);
-}
+// if (isset($_POST['delete']) && isset($_POST['book_id'])) {
+//     $books = [];
+//     deleteBook($connect);
+//     $books = loadBook($connect);
+// }
 
 
-function updateBook($connect)
-{
-    $id = intval($_POST['book_id']);
-    $title = htmlspecialchars($_POST['title']);
-    $author = htmlspecialchars($_POST['author']);
-    $category = htmlspecialchars($_POST['category']);
+// function updateBook($connect)
+// {
+//     $id = intval($_POST['book_id']);
+//     $title = htmlspecialchars($_POST['title']);
+//     $author = htmlspecialchars($_POST['author']);
+//     $category = htmlspecialchars($_POST['category']);
 
-    $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
-    $stmt->bind_param("sssi", $title, $author, $category, $id);
-    $result = $stmt->execute();
-    if (!$result) {
-        throw new Exception("Error updating book in databases: " . $connect->error);
-    }
-    $stmt->close();
-}
-function deleteBook($connect)
-{
-    $id = intval($_POST['book_id']);
-    $stmt = $connect->prepare("DELETE FROM book WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $result = $stmt->execute();
-    if (!$result) {
-        throw new Exception("Error deleting book in databases: " . $connect->error);
-    }
-    $stmt->close();
-}
-function addBook($connect)
-{
-    if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
-        $title = htmlspecialchars($_POST['title']);
-        $author = htmlspecialchars($_POST['author']);
-        $category = htmlspecialchars($_POST['category']);
-        $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $title, $author, $category);
-        $result = $stmt->execute();
-        if (!$result) {
-            throw new Exception("Error adding book in database: " . $connect->error);
-        }
-        $stmt->close();
-    }
-}
+//     $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
+//     $stmt->bind_param("sssi", $title, $author, $category, $id);
+//     $result = $stmt->execute();
+//     if (!$result) {
+//         throw new Exception("Error updating book in databases: " . $connect->error);
+//     }
+//     $stmt->close();
+// }
+// function deleteBook($connect)
+// {
+//     $id = intval($_POST['book_id']);
+//     $stmt = $connect->prepare("DELETE FROM book WHERE id = ?");
+//     $stmt->bind_param("i", $id);
+//     $result = $stmt->execute();
+//     if (!$result) {
+//         throw new Exception("Error deleting book in databases: " . $connect->error);
+//     }
+//     $stmt->close();
+// }
+// function addBook($connect)
+// {
+//     if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
+//         $title = htmlspecialchars($_POST['title']);
+//         $author = htmlspecialchars($_POST['author']);
+//         $category = htmlspecialchars($_POST['category']);
+//         $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
+//         $stmt->bind_param("sss", $title, $author, $category);
+//         $result = $stmt->execute();
+//         if (!$result) {
+//             throw new Exception("Error adding book in database: " . $connect->error);
+//         }
+//         $stmt->close();
+//     }
+// }
 ?>
 
 <!DOCTYPE html>
@@ -115,16 +115,16 @@ function addBook($connect)
                                     <li>
                                         <ul role="list" class="-mx-2 space-y-1">
                                             <li>
-                                                <a href="#" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold text-indigo-600">
-                                                    <svg class="size-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                                <a href="#" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold">
+                                                    <svg class="size-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                                                     </svg>
                                                     Dashboard
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="users.php" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                    <svg class="size-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                                <a href="users.php" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold  hover:bg-gray-50 text-indigo-600">
+                                                    <svg class="size-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                                                     </svg>
                                                     Users
@@ -152,16 +152,16 @@ function addBook($connect)
                                 <ul role="list" class="-mx-2 space-y-1">
                                     <li>
                                         <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
-                                        <a href="index.php" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold text-indigo-600">
-                                            <svg class="size-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                        <a href="index.php" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm/6 font-semibold text-gray-900 hover:text-indigo-600">
+                                            <svg class="size-6 shrink-0 group-hover:text-indigo-600 text-gray-900" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
                                             </svg>
                                             Dashboard
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="users.php" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                            <svg class="size-6 shrink-0 text-gray-400 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                        <a href="users.php" class="group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-600 hover:bg-gray-50">
+                                            <svg class="size-6 shrink-0  text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                                             </svg>
                                             Users
@@ -202,18 +202,7 @@ function addBook($connect)
                     <img class="size-8 rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                 </a>
             </div>
-
-            <main class="lg:pl-72">
-                <div class="xl:pr-96">
-                    <div class="px-4 py-10 sm:px-6 lg:px-8 lg:py-6">
-                        <!-- Main area -->
-                    </div>
-                </div>
-            </main>
-
-
         </div>
-
     </aside>
     <main class="p-10 max-w-4/5 ml-72">
 
@@ -274,22 +263,21 @@ function addBook($connect)
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
                                 <?php
-                                if ($books && count($books) > 0) {
-                                    for ($i = 0; $i < count($books); $i++) {
+                                if ($users && count($users) > 0) {
+                                    for ($i = 0; $i < count($users); $i++) {
                                 ?>
                                         <tr>
                                             <form action="book.php" method="POST">
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['id'] ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $books[$i]['title'];  ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $books[$i]['author']; ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category"/>' : $books[$i]['category']; ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $users[$i]['id'] ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $users[$i]['id'];  ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $users[$i]['email']; ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">
                                                     <span class="sr-only">Edit</span>
-                                                    <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
-                                                    <?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
+                                                    <input type="hidden" name="book_id" value="<?php echo $users[$i]['id']; ?>" />
+                                                    <?php echo $edit == true && $_POST['book_id'] == $users[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                                                     <span class="sr-only">Delete</span>
-                                                    <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
+                                                    <input type="hidden" name="book_id" value="<?php echo $users[$i]['id']; ?>" />
                                                     <button type="submit" class="text-indigo-600 hover:text-indigo-900" name="delete">Delete</button>
                                                 </th>
                                                 </td>
@@ -304,10 +292,9 @@ function addBook($connect)
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category" /></td>
-                                        <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><button type="submit" name="create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add book</button></td>
+                                        <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><button type="submit" name="create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add User</button></td>
                                     </form>
                                 </tr>
-                                <!-- More people... -->
                             </tbody>
                         </table>
                     </div>
