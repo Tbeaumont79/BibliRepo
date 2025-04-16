@@ -1,13 +1,18 @@
-<?php 
-if (isset($_POST['save']) && isset($_POST['book_id'])) {
+<?php
+require_once('./app/databases/db_connect.php');
+$edit = false;
+if (isset($_POST['edit']) && isset($_POST['book_id'])) {
     $books = [];
+    $edit = !$edit;
+  }
+if (isset($_POST['save']) && isset($_POST['book_id'])) {
     $edit = false;
     updateBook($connect);
-    $books = loadBook($connect);
+    header("Location: book.php");
+    exit();
   }
   function updateBook($connect)
   {
-    print_r("je passe ici");
     $id = intval($_POST['book_id']);
     $title = htmlspecialchars($_POST['title']);
     $author = htmlspecialchars($_POST['author']);

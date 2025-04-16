@@ -1,5 +1,6 @@
 <?php
 require_once('./app/databases/db_connect.php');
+require_once('./app/dashboard/book/updateBook.php');
 $books = loadBook($connect);
 $edit = false;
 function loadBook($connect)
@@ -14,11 +15,7 @@ function loadBook($connect)
   return $books;
 }
 
-if (isset($_POST['edit']) && isset($_POST['book_id'])) {
-  $books = [];
-  $edit = !$edit;
-  $books = loadBook($connect);
-}
+
 ?>
 
 <!DOCTYPE html>
@@ -231,7 +228,7 @@ if (isset($_POST['edit']) && isset($_POST['book_id'])) {
                           <?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                           <span class="sr-only">Delete</span>
                           <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
-                          <button type="submit" class="text-indigo-600 hover:text-indigo-900" name="delete">Delete</button>
+                          <a href="deleteBook.php?id=<?php echo $books[$i]['id']; ?>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                         </th>
                         </td>
                       </form>
