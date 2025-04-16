@@ -6,14 +6,17 @@ session_start();
 if (isset($_POST['email']) && isset($_POST['password'])) {
   $email = htmlspecialchars($_POST['email']);
   $password = htmlspecialchars($_POST['password']);
-
-  $user = $connect->query('SELECT * FROM users WHERE email = "' . $email . '"');
-  if ($user->num_rows > 0) {
-    $user = $user->fetch_assoc();
+  print_r('password : ' . $password);
+  print_r('email : ' . $email);
+  $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+  $stmt->bindParam(':email', $email);
+  $result = $stmt->execute();
+  if ($result) {
+    $user = $stmt->fetch();
+    print_r('user ' . $user[0]);
     if (password_verify($password, $user['password'])) {
       $_SESSION['email'] = $email;
-      header('Location: ../index.php');
-      exit;
+      header('Location: /');
     }
   } else {
     throw new Exception("Invalid email or password");

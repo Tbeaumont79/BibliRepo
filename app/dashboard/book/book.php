@@ -1,48 +1,46 @@
 <?php
 require_once('./app/databases/db_connect.php');
-$books = loadBook($connect);
+$books = loadBook($pdo);
 $edit = false;
 $title = '';
 $author = '';
 $category = '';
 if (isset($_POST['edit']) && isset($_POST['book_id'])) {
-    $books = [];
-    $edit = !$edit;
-    $books = loadBook($connect);
+  $books = [];
+  $edit = !$edit;
+  $books = loadBook($pdo);
 }
 if (isset($_POST['save']) && isset($_POST['book_id'])) {
-    $id = $_POST['book_id'];
-    $book = getBook($connect, $id);
-    if (!$book) {
-      die("Book not found");
-    }
-    $title = $_POST['title'] != '' ? $_POST['title'] : $book['title'] ;
-    $author = $_POST['author'] != '' ? $_POST['author'] : $book['author'];
-    $category = $_POST['category'] != '' ? $_POST['category'] : $book['category'];
-    $edit = !$edit;
-    header("Location: updateBook.php?id=" . $_POST['book_id'] . "&title=" . $title . "&author=" . $author . "&category=" . $category);
+  $id = $_POST['book_id'];
+  $book = getBook($pdo, $id);
+  if (!$book) {
+    die("Book not found");
+  }
+  $title = $_POST['title'] != '' ? $_POST['title'] : $book['title'];
+  $author = $_POST['author'] != '' ? $_POST['author'] : $book['author'];
+  $category = $_POST['category'] != '' ? $_POST['category'] : $book['category'];
+  $edit = !$edit;
+  header("Location: updateBook.php?id=" . $_POST['book_id'] . "&title=" . $title . "&author=" . $author . "&category=" . $category);
 }
 
 function getBook($connect, $id)
 {
-  $stmt = $connect->prepare("SELECT * FROM book WHERE id = ?");
-  $stmt->bind_param("i", $id);
-  $result =  $stmt->execute();
+  $stmt = $connect->prepare("SELECT * FROM book WHERE id = :id");
+  $stmt->bindParam(":id", $id);
+  $result = $stmt->execute();
   if ($result) {
-    $book = $stmt->get_result()->fetch_assoc();
+    $book = $stmt->fetch(PDO::FETCH_ASSOC);
     return $book;
   }
   return null;
 }
+
 function loadBook($connect)
 {
   $books = [];
-  $stmt = $connect->query("SELECT * FROM book");
-  if ($stmt && $stmt->num_rows > 0) {
-    for ($i = 0; $i < $stmt->num_rows; $i++) {
-      array_push($books, $stmt->fetch_assoc());
-    }
-  }
+  $stmt = $connect->prepare("SELECT * FROM book");
+  $stmt->execute();
+  $books = $stmt->fetchAll();
   return $books;
 }
 ?>
@@ -255,7 +253,7 @@ function loadBook($connect)
                           <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
                           <?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                           <span class="sr-only">Delete</span>
-                          <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />  
+                          <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
                           <a href="deleteBook.php?id=<?php echo $books[$i]['id']; ?>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                         </th>
                         </td>

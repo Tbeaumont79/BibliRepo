@@ -1,16 +1,13 @@
 <?php
 require_once('./app/databases/db_connect.php');
-$users = loadusers($connect);
+$users = loadusers($pdo);
 $edit = false;
 function loadusers($connect)
 {
     $users = [];
-    $stmt = $connect->query("SELECT * FROM users;");
-    if ($stmt && $stmt->num_rows > 0) {
-        for ($i = 0; $i < $stmt->num_rows; $i++) {
-            array_push($users, $stmt->fetch_assoc());
-        }
-    }
+    $stmt = $connect->prepare("SELECT * FROM users;");
+    $stmt->execute();
+    $users = $stmt->fetchAll();
     return $users;
 }
 // if (isset($_POST['create'])) {
