@@ -13,70 +13,11 @@ function loadBook($connect)
   }
   return $books;
 }
-if (isset($_POST['create'])) {
-  $books = [];
-  addBook($connect);
-  $books = loadBook($connect);
-}
+
 if (isset($_POST['edit']) && isset($_POST['book_id'])) {
   $books = [];
   $edit = !$edit;
   $books = loadBook($connect);
-}
-if (isset($_POST['save']) && isset($_POST['book_id'])) {
-  $books = [];
-  $edit = false;
-  updateBook($connect);
-  $books = loadBook($connect);
-}
-
-if (isset($_POST['delete']) && isset($_POST['book_id'])) {
-  $books = [];
-  deleteBook($connect);
-  $books = loadBook($connect);
-}
-
-
-function updateBook($connect)
-{
-  $id = intval($_POST['book_id']);
-  $title = htmlspecialchars($_POST['title']);
-  $author = htmlspecialchars($_POST['author']);
-  $category = htmlspecialchars($_POST['category']);
-
-  $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
-  $stmt->bind_param("sssi", $title, $author, $category, $id);
-  $result = $stmt->execute();
-  if (!$result) {
-    throw new Exception("Error updating book in databases: " . $connect->error);
-  }
-  $stmt->close();
-}
-function deleteBook($connect)
-{
-  $id = intval($_POST['book_id']);
-  $stmt = $connect->prepare("DELETE FROM book WHERE id = ?");
-  $stmt->bind_param("i", $id);
-  $result = $stmt->execute();
-  if (!$result) {
-    throw new Exception("Error deleting book in databases: " . $connect->error);
-  }
-  $stmt->close();
-}
-function addBook($connect)
-{
-  if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
-    $title = htmlspecialchars($_POST['title']);
-    $author = htmlspecialchars($_POST['author']);
-    $category = htmlspecialchars($_POST['category']);
-    $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $title, $author, $category);
-    $result = $stmt->execute();
-    if (!$result) {
-      throw new Exception("Error adding book in database: " . $connect->error);
-    }
-    $stmt->close();
-  }
 }
 ?>
 
@@ -87,7 +28,7 @@ function addBook($connect)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="../styles/style.css">
+  <link rel="stylesheet" href="../../styles/style.css">
 </head>
 
 <body>
@@ -278,7 +219,7 @@ function addBook($connect)
                   for ($i = 0; $i < count($books); $i++) {
                 ?>
                     <tr>
-                      <form action="book.php" method="POST">
+                      <form action="updateBook.php" method="POST">
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['id'] ?></td>
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $books[$i]['title'];  ?></td>
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $books[$i]['author']; ?></td>
@@ -299,7 +240,7 @@ function addBook($connect)
                 <?php }
                 } ?>
                 <tr>
-                  <form action="book.php" method="POST">
+                  <form action="addBook.php" method="POST">
                     <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo 'id'; ?></td>
                     <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title" /></td>
                     <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author" /></td>

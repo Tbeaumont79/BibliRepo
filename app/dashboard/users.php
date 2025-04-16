@@ -267,7 +267,7 @@ function loadusers($connect)
                                     for ($i = 0; $i < count($users); $i++) {
                                 ?>
                                         <tr>
-                                            <form action="book.php" method="POST">
+                                            <form action="users.php" method="POST">
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $users[$i]['id'] ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $users[$i]['id'];  ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $users[$i]['email']; ?></td>

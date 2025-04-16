@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
 	plugins: [
 		usePHP({
-			entry: ["*.php", "app/**/*.php"],
+			entry: ["*.php", "app/**/*.php", "app/dashboard/book/*.php"],
 			dev: {
 				errorLevels: EPHPError.ERROR | EPHPError.WARNING | EPHPError.STRICT,
 				cleanup: false,
