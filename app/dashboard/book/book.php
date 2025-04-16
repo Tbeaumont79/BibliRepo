@@ -1,8 +1,39 @@
 <?php
 require_once('./app/databases/db_connect.php');
-require_once('./app/dashboard/book/updateBook.php');
 $books = loadBook($connect);
 $edit = false;
+$title = '';
+$author = '';
+$category = '';
+if (isset($_POST['edit']) && isset($_POST['book_id'])) {
+    $books = [];
+    $edit = !$edit;
+    $books = loadBook($connect);
+}
+if (isset($_POST['save']) && isset($_POST['book_id'])) {
+    $id = $_POST['book_id'];
+    $book = getBook($connect, $id);
+    if (!$book) {
+      die("Book not found");
+    }
+    $title = $_POST['title'] != '' ? $_POST['title'] : $book['title'] ;
+    $author = $_POST['author'] != '' ? $_POST['author'] : $book['author'];
+    $category = $_POST['category'] != '' ? $_POST['category'] : $book['category'];
+    $edit = !$edit;
+    header("Location: updateBook.php?id=" . $_POST['book_id'] . "&title=" . $title . "&author=" . $author . "&category=" . $category);
+}
+
+function getBook($connect, $id)
+{
+  $stmt = $connect->prepare("SELECT * FROM book WHERE id = ?");
+  $stmt->bind_param("i", $id);
+  $result =  $stmt->execute();
+  if ($result) {
+    $book = $stmt->get_result()->fetch_assoc();
+    return $book;
+  }
+  return null;
+}
 function loadBook($connect)
 {
   $books = [];
@@ -14,10 +45,7 @@ function loadBook($connect)
   }
   return $books;
 }
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -216,7 +244,7 @@ function loadBook($connect)
                   for ($i = 0; $i < count($books); $i++) {
                 ?>
                     <tr>
-                      <form action="updateBook.php" method="POST">
+                      <form action="book.php" method="POST">
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $books[$i]['id'] ?></td>
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $books[$i]['title'];  ?></td>
                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $books[$i]['author']; ?></td>
@@ -227,7 +255,7 @@ function loadBook($connect)
                           <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
                           <?php echo $edit == true && $_POST['book_id'] == $books[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                           <span class="sr-only">Delete</span>
-                          <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />
+                          <input type="hidden" name="book_id" value="<?php echo $books[$i]['id']; ?>" />  
                           <a href="deleteBook.php?id=<?php echo $books[$i]['id']; ?>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                         </th>
                         </td>
