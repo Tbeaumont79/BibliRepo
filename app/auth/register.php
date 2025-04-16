@@ -9,9 +9,14 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     throw new Exception("Passwords do not match");
   }
   $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-  $connect->query('INSERT INTO users (email, password) VALUES ("' . $email . '", "' . $hashed_password . '")');
-  session_start();
-  header('Location: ./index.php');
+  $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
+  $stmt->bindParam(':email', $email);
+  $stmt->bindParam(':password', $hashed_password);
+  $result = $stmt->execute();
+  if ($result) {
+    session_start();
+    header('Location: /');
+  }
   exit;
 }
 

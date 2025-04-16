@@ -1,11 +1,11 @@
 <?php
 
-$host = "localhost:3306";
-$user = "root";
-$pass = "";
-$database = "bibliRepo";
-
-$connect = mysqli_connect($host, $user, $pass, $database);
-if (!$connect) {
-    die("Connection failed: " . mysqli_connect_error());
+try {
+    $host = "localhost:3306";
+    $user = "root";
+    $pass = "";
+    $database = "bibliRepo";
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $pass);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
