@@ -5,7 +5,8 @@ $user = "root";
 $pass = "";
 $database = "bibliRepo";
 
-$connect = mysqli_connect($host, $user, $pass, $database);
-if (!$connect) {
-    die("Connection failed: " . mysqli_connect_error());
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$database", $user, $pass);
+} catch (PDOException $e) {
+    die("Connection failed: " . $e->getMessage());
 }
