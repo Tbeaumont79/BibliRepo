@@ -1,14 +1,14 @@
 <?php
 require_once('./app/databases/db_connect.php');
-$users = loadusers($pdo);
+$authors = loadAuthors($pdo);
 $edit = false;
-function loadusers($connect)
+function loadAuthors($connect)
 {
-    $users = [];
-    $stmt = $connect->prepare("SELECT * FROM users;");
+    $authors = [];
+    $stmt = $connect->prepare("SELECT * FROM authors;");
     $stmt->execute();
-    $users = $stmt->fetchAll();
-    return $users;
+    $authors = $stmt->fetchAll();
+    return $authors;
 }
 // if (isset($_POST['create'])) {
 //     $books = [];
@@ -84,7 +84,7 @@ function loadusers($connect)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../../styles/style.css">
 </head>
 
 <body>
@@ -260,22 +260,22 @@ function loadusers($connect)
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
                                 <?php
-                                if ($users && count($users) > 0) {
-                                    for ($i = 0; $i < count($users); $i++) {
+                                if ($authors && count($authors) > 0) {
+                                    for ($i = 0; $i < count($authors); $i++) {
                                 ?>
                                         <tr>
-                                            <form action="users.php" method="POST">
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $users[$i]['id'] ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $users[$i]['id'];  ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $users[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $users[$i]['email']; ?></td>
+                                            <form action="authors.php" method="POST">
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['id'] ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $authors[$i]['id'];  ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $authors[$i]['email']; ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">
                                                     <span class="sr-only">Edit</span>
-                                                    <input type="hidden" name="book_id" value="<?php echo $users[$i]['id']; ?>" />
-                                                    <?php echo $edit == true && $_POST['book_id'] == $users[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
+                                                    <input type="hidden" name="author_id" value="<?php echo $authors[$i]['id']; ?>" />
+                                                    <?php echo $edit == true && $_POST['author_id'] == $authors[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                                                     <span class="sr-only">Delete</span>
-                                                    <input type="hidden" name="book_id" value="<?php echo $users[$i]['id']; ?>" />
-                                                    <button type="submit" class="text-indigo-600 hover:text-indigo-900" name="delete">Delete</button>
+                                                    <input type="hidden" name="author_id" value="<?php echo $authors[$i]['id']; ?>" />
+                                                    <a href="deleteAuthors.php?id=<?php echo $authors[$i]['id']; ?>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
                                                 </th>
                                                 </td>
                                             </form>
@@ -284,7 +284,7 @@ function loadusers($connect)
                                 <?php }
                                 } ?>
                                 <tr>
-                                    <form action="book.php" method="POST">
+                                    <form action="addAuthors.php" method="POST">
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo 'id'; ?></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author" /></td>
