@@ -14,6 +14,7 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
     $id = $_POST['author_id'];
     deleteElementFromTable('authors', $id, $pdo);
 }
+
 // if (isset($_POST['create'])) {
 //     $books = [];
 //     addBook($connect);
