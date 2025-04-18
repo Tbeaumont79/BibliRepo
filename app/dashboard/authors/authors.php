@@ -10,6 +10,10 @@ function loadAuthors($connect)
     $authors = $stmt->fetchAll();
     return $authors;
 }
+if (isset($_POST['delete']) && isset($_POST['author_id'])) {
+    $id = $_POST['author_id'];
+    deleteElementFromTable('authors', $id, $pdo);
+}
 // if (isset($_POST['create'])) {
 //     $books = [];
 //     addBook($connect);
@@ -275,7 +279,7 @@ function loadAuthors($connect)
                                                     <?php echo $edit == true && $_POST['author_id'] == $authors[$i]['id'] ? '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="save">Save</button>' : '<button type="submit" class="text-indigo-600 hover:text-indigo-900" name="edit">Edit</button>' ?>
                                                     <span class="sr-only">Delete</span>
                                                     <input type="hidden" name="author_id" value="<?php echo $authors[$i]['id']; ?>" />
-                                                    <a href="deleteAuthors.php?id=<?php echo $authors[$i]['id']; ?>" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                                    <button type="submit" class="text-indigo-600 hover:text-indigo-900" name="delete">Delete</button>
                                                 </th>
                                                 </td>
                                             </form>
