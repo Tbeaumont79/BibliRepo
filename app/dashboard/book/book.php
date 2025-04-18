@@ -13,8 +13,6 @@ if (isset($_POST['edit']) && isset($_POST['book_id'])) {
 if (isset($_POST['delete']) && isset($_POST['book_id'])) {
   $id = $_POST['book_id'];
   deleteElementFromTable('book', $id, $pdo);
-  header("Location: book.php");
-  exit();
 }
 if (isset($_POST['save']) && isset($_POST['book_id'])) {
   $id = $_POST['book_id'];
@@ -121,6 +119,7 @@ if (isset($_POST['save']) && isset($_POST['book_id'])) {
                         </td>
                       </form>
                     </tr>
+
                 <?php }
                 } ?>
                 <tr>

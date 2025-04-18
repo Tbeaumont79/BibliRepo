@@ -31,3 +31,4 @@ function deleteElementFromTable($table, $id, $pdo)
     $stmt->bindParam(":id", $id);
     $stmt->execute();
 }
+
