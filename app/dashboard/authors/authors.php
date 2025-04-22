@@ -1,5 +1,5 @@
 <?php
-require_once('./app/databases/db_connect.php');
+require_once('../../databases/db_connect.php');
 $authors = loadAuthors($pdo);
 $edit = false;
 function loadAuthors($connect)
@@ -13,73 +13,10 @@ function loadAuthors($connect)
 if (isset($_POST['delete']) && isset($_POST['author_id'])) {
     $id = $_POST['author_id'];
     deleteElementFromTable('authors', $id, $pdo);
+    header("Location: authors.php");
+    exit();
 }
 
-// if (isset($_POST['create'])) {
-//     $books = [];
-//     addBook($connect);
-//     $books = loadBook($connect);
-// }
-// if (isset($_POST['edit']) && isset($_POST['book_id'])) {
-//     $books = [];
-//     $edit = !$edit;
-//     $books = loadBook($connect);
-// }
-// if (isset($_POST['save']) && isset($_POST['book_id'])) {
-//     $books = [];
-//     $edit = false;
-//     updateBook($connect);
-//     $books = loadBook($connect);
-// }
-
-// if (isset($_POST['delete']) && isset($_POST['book_id'])) {
-//     $books = [];
-//     deleteBook($connect);
-//     $books = loadBook($connect);
-// }
-
-
-// function updateBook($connect)
-// {
-//     $id = intval($_POST['book_id']);
-//     $title = htmlspecialchars($_POST['title']);
-//     $author = htmlspecialchars($_POST['author']);
-//     $category = htmlspecialchars($_POST['category']);
-
-//     $stmt = $connect->prepare("UPDATE book SET title = ?, author = ?, category = ? WHERE id = ?");
-//     $stmt->bind_param("sssi", $title, $author, $category, $id);
-//     $result = $stmt->execute();
-//     if (!$result) {
-//         throw new Exception("Error updating book in databases: " . $connect->error);
-//     }
-//     $stmt->close();
-// }
-// function deleteBook($connect)
-// {
-//     $id = intval($_POST['book_id']);
-//     $stmt = $connect->prepare("DELETE FROM book WHERE id = ?");
-//     $stmt->bind_param("i", $id);
-//     $result = $stmt->execute();
-//     if (!$result) {
-//         throw new Exception("Error deleting book in databases: " . $connect->error);
-//     }
-//     $stmt->close();
-// }
-// function addBook($connect)
-// {
-//     if (isset($_POST['title']) && isset($_POST['author']) && isset($_POST['category'])) {
-//         $title = htmlspecialchars($_POST['title']);
-//         $author = htmlspecialchars($_POST['author']);
-//         $category = htmlspecialchars($_POST['category']);
-//         $stmt = $connect->prepare("INSERT INTO book (title, author, category) VALUES (?, ?, ?)");
-//         $stmt->bind_param("sss", $title, $author, $category);
-//         $result = $stmt->execute();
-//         if (!$result) {
-//             throw new Exception("Error adding book in database: " . $connect->error);
-//         }
-//         $stmt->close();
-//     }
-// }
 ?>
 
 <!DOCTYPE html>
@@ -235,12 +172,6 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                     </th>
                                     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         <a href="#" class="group inline-flex">
-                                            Title
-                                            <!-- Active: "bg-gray-200 text-gray-900 group-hover:bg-gray-300", Not Active: "invisible text-gray-400 group-hover:visible group-focus:visible" -->
-                                        </a>
-                                    </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        <a href="#" class="group inline-flex">
                                             Author
                                             <!-- Active: "bg-gray-200 text-gray-900 group-hover:bg-gray-300", Not Active: "invisible text-gray-400 group-hover:visible group-focus:visible" -->
                                             <span class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
@@ -250,17 +181,7 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                             </span>
                                         </a>
                                     </th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        <a href="#" class="group inline-flex">
-                                            Category
-                                            <!-- Active: "bg-gray-200 text-gray-900 group-hover:bg-gray-300", Not Active: "invisible text-gray-400 group-hover:visible group-focus:visible" -->
-                                            <span class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
-                                                <svg class="invisible ml-2 size-5 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-                                                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </th>
+                                 
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
@@ -271,8 +192,7 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                         <tr>
                                             <form action="authors.php" method="POST">
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['id'] ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $authors[$i]['id'];  ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author"/>' : $authors[$i]['email']; ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $authors[$i]['email'];  ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">
                                                     <span class="sr-only">Edit</span>
@@ -291,7 +211,6 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                 <tr>
                                     <form action="addAuthors.php" method="POST">
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo 'id'; ?></td>
-                                        <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><button type="submit" name="create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add User</button></td>

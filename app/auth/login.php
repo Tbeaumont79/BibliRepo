@@ -8,7 +8,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
   $password = htmlspecialchars($_POST['password']);
   print_r('password : ' . $password);
   print_r('email : ' . $email);
-  $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
+  $stmt = $pdo->prepare('SELECT * FROM authors WHERE email = :email');
   $stmt->bindParam(':email', $email);
   $result = $stmt->execute();
   if ($result) {

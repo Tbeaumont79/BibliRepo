@@ -1,5 +1,6 @@
 <?php 
     require_once('../../databases/db_connect.php');
+
     if (isset($_POST['create'])) {
         addAuthor($connect, $_POST['name']);
         header("Location: authors.php");
