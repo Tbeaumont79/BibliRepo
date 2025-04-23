@@ -38,7 +38,7 @@ if (isset($_POST['save']) && isset($_POST['book_id'])) {
 </head>
 
 <body>
-  <?php require('./app/dashboard/layout/sideMenu.php'); ?>
+  <?php require('./app/dashboard/sideMenu.php'); ?>
   <main class="p-10 max-w-4/5 ml-72">
 
     <div class="px-4 sm:px-6 lg:px-8">

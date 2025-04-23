@@ -1,20 +1,18 @@
 import { defineConfig } from "vite";
-import usePHP, { EPHPError } from "vite-plugin-php";
+import usePHP from "vite-plugin-php";
 import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
 	plugins: [
 		usePHP({
 			entry: [
-				"*.php",
-				"app/**/*.php",
-				"app/dashboard/book/*.php",
-				"app/dashboard/authors/*.php",
+				"index.php",
+				"app/auth/*.php",
+				"app/dashboard/*.php",
+				"app/dashboard/**/*.php",
+				"app/databases/*.php",
 			],
-			dev: {
-				errorLevels: EPHPError.ERROR | EPHPError.WARNING | EPHPError.STRICT,
-				cleanup: false,
-			},
 		}),
+
 		tailwindcss(),
 	],
 });

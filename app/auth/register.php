@@ -1,6 +1,5 @@
 <?php
-require('./app/databases/db_connect.php');
-
+require_once("./app/databases/db_connect.php");
 if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm_password'])) {
   $email = htmlspecialchars($_POST['email']);
   $password = htmlspecialchars($_POST['password']);
