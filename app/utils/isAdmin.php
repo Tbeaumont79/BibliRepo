@@ -1,6 +1,9 @@
 <?php
 require_once 'app/databases/db_connect.php';
-
+session_start();
+if (isset($_SESSION['email'])) {
+    isAdmin($pdo);
+}
 function isAdmin($pdo)
 {
     if (isset($_SESSION['email'])) {

@@ -1,21 +1,21 @@
 <?php
 require_once("app/databases/db_connect.php");
 
-session_start();
 
 if (isset($_POST['email']) && isset($_POST['password'])) {
   $email = htmlspecialchars($_POST['email']);
   $password = htmlspecialchars($_POST['password']);
-  print_r('password : ' . $password);
-  print_r('email : ' . $email);
   $stmt = $pdo->prepare('SELECT * FROM users WHERE email = :email');
   $stmt->bindParam(':email', $email);
   $result = $stmt->execute();
   if ($result) {
     $user = $stmt->fetch();
     if (password_verify($password, $user['password'])) {
+      session_start();
       $_SESSION['email'] = $email;
       header('Location: /');
+    } else {
+      echo "Invalid email or password";
     }
   } else {
     throw new Exception("Invalid email or password");
