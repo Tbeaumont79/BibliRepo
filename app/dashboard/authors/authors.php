@@ -45,8 +45,8 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold text-gray-900">Books</h1>
-                    <p class="mt-2 text-sm text-gray-700">A list of all books in your Database including their id, title, author and category.</p>
+                    <h1 class="text-base font-semibold text-gray-900">Authors</h1>
+                    <p class="mt-2 text-sm text-gray-700">A list of all Authors in your Database including their id, name and the number of books they have written.</p>
                 </div>
             </div>
             <div class="mt-8 flow-root">
