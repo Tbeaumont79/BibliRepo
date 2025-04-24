@@ -1,5 +1,7 @@
 <?php
 require_once('./app/databases/db_connect.php');
+require_once('./app/utils/deleteElementFromTable.php');
+
 $authors = loadAuthors($pdo);
 $edit = false;
 function loadAuthors($connect)
@@ -100,7 +102,6 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['id'] ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['name'] ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo getTotalBookWritten($authors[$i]['id'], $pdo) ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $authors[$i]['email'];  ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">
                                                     <span class="sr-only">Edit</span>

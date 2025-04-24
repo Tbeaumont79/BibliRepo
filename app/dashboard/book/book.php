@@ -1,5 +1,9 @@
 <?php
 require_once('./app/databases/db_connect.php');
+require_once('./app/utils/listElementFromTable.php');
+require_once('./app/utils/getElementFromTable.php');
+require_once('./app/utils/deleteElementFromTable.php');
+
 $books = listElementsFromTable('books', $pdo);
 $edit = false;
 $title = '';

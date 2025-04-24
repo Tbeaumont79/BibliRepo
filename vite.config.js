@@ -10,6 +10,7 @@ export default defineConfig({
 				"app/dashboard/*.php",
 				"app/dashboard/**/*.php",
 				"app/databases/*.php",
+				"app/utils/*.php",
 			],
 		}),
 
