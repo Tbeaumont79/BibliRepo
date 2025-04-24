@@ -1,6 +1,6 @@
 <?php
-require_once('./app/databases/db_connect.php');
-require_once('./app/utils/deleteElementFromTable.php');
+require_once('app/databases/db_connect.php');
+require_once('app/utils/deleteElementFromTable.php');
 
 $authors = loadAuthors($pdo);
 $edit = false;
