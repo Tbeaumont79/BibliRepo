@@ -1,3 +1,9 @@
+<?php
+if (!isAdmin($pdo)) {
+  header('Location: /');
+  exit();
+}
+?>
 <aside>
   <div>
     <div class="relative z-50 lg:hidden" role="dialog" aria-modal="true">

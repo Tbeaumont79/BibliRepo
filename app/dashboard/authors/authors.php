@@ -1,7 +1,11 @@
 <?php
 require_once('app/databases/db_connect.php');
 require_once('app/utils/deleteElementFromTable.php');
-
+require_once('app/utils/isAdmin.php');
+if (!isAdmin($pdo)) {
+    header('Location: /');
+    exit();
+}
 $authors = loadAuthors($pdo);
 $edit = false;
 function loadAuthors($connect)

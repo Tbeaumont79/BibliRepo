@@ -1,3 +1,11 @@
+<?php
+require_once('app/utils/isAdmin.php');
+require_once('app/databases/db_connect.php');
+if (!isAdmin($pdo)) {
+  header('Location: /');
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

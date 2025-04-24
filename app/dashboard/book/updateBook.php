@@ -1,5 +1,5 @@
 <?php
-require_once('./app/databases/db_connect.php');
+require_once('app/databases/db_connect.php');
 if (isset($_GET['id']) && isset($_GET['title']) && isset($_GET['author']) && isset($_GET['category'])) {
   updateBook($pdo);
   header("Location: book.php");

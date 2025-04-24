@@ -3,7 +3,12 @@ require_once('app/databases/db_connect.php');
 require_once('app/utils/listElementFromTable.php');
 require_once('app/utils/getElementFromTable.php');
 require_once('app/utils/deleteElementFromTable.php');
-
+require_once('app/utils/isAdmin.php');
+require_once('app/databases/db_connect.php');
+if (!isAdmin($pdo)) {
+  header('Location: /');
+  exit();
+}
 $books = listElementsFromTable('books', $pdo);
 $edit = false;
 $title = '';
