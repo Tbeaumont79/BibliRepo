@@ -1,6 +1,6 @@
 <?php
 require_once('./app/databases/db_connect.php');
-$books = listElementsFromTable('book', $pdo);
+$books = listElementsFromTable('books', $pdo);
 $edit = false;
 $title = '';
 $author = '';
@@ -8,15 +8,15 @@ $category = '';
 if (isset($_POST['edit']) && isset($_POST['book_id'])) {
   $books = [];
   $edit = !$edit;
-  $books = listElementsFromTable('book', $pdo);
+  $books = listElementsFromTable('books', $pdo);
 }
 if (isset($_POST['delete']) && isset($_POST['book_id'])) {
   $id = $_POST['book_id'];
-  deleteElementFromTable('book', $id, $pdo);
+  deleteElementFromTable('books', $id, $pdo);
 }
 if (isset($_POST['save']) && isset($_POST['book_id'])) {
   $id = $_POST['book_id'];
-  $book = getElementFromTable('book', $id, $pdo);
+  $book = getElementFromTable('books', $id, $pdo);
   if (!$book) {
     die("Book not found");
   }

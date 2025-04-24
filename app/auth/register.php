@@ -8,7 +8,7 @@ if (isset($_POST['email']) && isset($_POST['password']) && isset($_POST['confirm
     throw new Exception("Passwords do not match");
   }
   $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-  $stmt = $pdo->prepare("INSERT INTO authors (email, password) VALUES (:email, :password)");
+  $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
   $stmt->bindParam(':email', $email);
   $stmt->bindParam(':password', $hashed_password);
   $result = $stmt->execute();

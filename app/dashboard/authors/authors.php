@@ -10,15 +10,25 @@ function loadAuthors($connect)
     $authors = $stmt->fetchAll();
     return $authors;
 }
+
+function getTotalBookWritten($id, $connect)
+{
+    $stmt = $connect->prepare("SELECT COUNT(*)
+FROM book_author
+WHERE author_id = :id ;");
+    $stmt->bindParam(":id", $id);
+    $stmt->execute();
+    $result = $stmt->fetch();
+    return $result[0];
+}
+
 if (isset($_POST['delete']) && isset($_POST['author_id'])) {
     $id = $_POST['author_id'];
     deleteElementFromTable('authors', $id, $pdo);
     header("Location: authors.php");
     exit();
 }
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,16 +41,13 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
 
 <body>
     <?php require('./app/dashboard/sideMenu.php'); ?>
-
     <main class="p-10 max-w-4/5 ml-72">
-
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
                     <h1 class="text-base font-semibold text-gray-900">Books</h1>
                     <p class="mt-2 text-sm text-gray-700">A list of all books in your Database including their id, title, author and category.</p>
                 </div>
-
             </div>
             <div class="mt-8 flow-root">
                 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -70,7 +77,17 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                             </span>
                                         </a>
                                     </th>
-
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        <a href="#" class="group inline-flex">
+                                            Number of book written
+                                            <!-- Active: "bg-gray-200 text-gray-900 group-hover:bg-gray-300", Not Active: "invisible text-gray-400 group-hover:visible group-focus:visible" -->
+                                            <span class="invisible ml-2 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible">
+                                                <svg class="invisible ml-2 size-5 flex-none rounded-sm text-gray-400 group-hover:visible group-focus:visible" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white">
@@ -81,6 +98,8 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                         <tr>
                                             <form action="authors.php" method="POST">
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['id'] ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['name'] ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo getTotalBookWritten($authors[$i]['id'], $pdo) ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true && $_POST['user_id'] == $authors[$i]['id'] ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="title" placeholder="Title"/>' : $authors[$i]['email'];  ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">
@@ -101,7 +120,6 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                     <form action="addAuthors.php" method="POST">
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo 'id'; ?></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author" /></td>
-                                        <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><input class="border-1 rounded-md border-purple-600 p-2" type="text" name="category" placeholder="Category" /></td>
                                         <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><button type="submit" name="create" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Add User</button></td>
                                     </form>
                                 </tr>
