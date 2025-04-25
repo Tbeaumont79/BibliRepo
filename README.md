@@ -44,8 +44,8 @@ Why i choose to use Vite ? First for the Developper Experience Vite has the HMR,
 │   │   └── img
 ├── README.md
 ├── index.php
-└── vite.config.js
-├── package.json
+├── vite.config.js
+└── package.json
 ```
 
 ### How to start the projet ?
