@@ -20,9 +20,7 @@ function loadAuthors($connect)
 
 function getTotalBookWritten($id, $connect)
 {
-    $stmt = $connect->prepare("SELECT COUNT(*)
-FROM book_author
-WHERE author_id = :id ;");
+    $stmt = $connect->prepare("SELECT COUNT(*) FROM book_author WHERE author_id = :id");
     $stmt->bindParam(":id", $id);
     $stmt->execute();
     $result = $stmt->fetch();
