@@ -1,0 +1,17 @@
+{
+	"name": "biblirepo",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"debug": "vite --debug"
+	},
+	"dependencies": {
+		"@tailwindcss/vite": "^4.1.3",
+		"tailwindcss": "^4.1.3",
+		"vite": "^6.2.6",
+		"vite-plugin-php": "^2.0.1"
+	}
+}

@@ -13,7 +13,6 @@ export default defineConfig({
 				"app/utils/*.php",
 			],
 		}),
-
 		tailwindcss(),
 	],
 });
