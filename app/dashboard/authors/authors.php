@@ -2,6 +2,7 @@
 require_once('app/databases/db_connect.php');
 require_once('app/utils/deleteElementFromTable.php');
 require_once('app/utils/isAdmin.php');
+require_once('app/utils/listElementFromTable.php');
 if (!isAdmin($pdo)) {
     header('Location: /');
     exit();
@@ -32,6 +33,24 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
     $id = $_POST['author_id'];
     deleteElementFromTable('authors', $id, $pdo);
     header("Location: authors.php");
+    exit();
+}
+
+if (isset($_POST['edit']) && isset($_POST['author_id'])) {
+    $authors = [];
+    $edit = !$edit;
+    $authors = listElementsFromTable('authors', $pdo);
+}
+if (isset($_POST['save']) && isset($_POST['author_id'])) {
+    $id = $_POST['author_id'];
+    $author = listElementsFromTable('authors', $pdo);
+
+    if (!$author) {
+        die("Author not found");
+    }
+    $author = $_POST['author'] ? $_POST['author'] : $author['name'];
+    print_r($author);
+    header("Location: updateAuthors.php?id=" . $id . "&author=" . $author);
     exit();
 }
 ?>
@@ -104,7 +123,7 @@ if (isset($_POST['delete']) && isset($_POST['author_id'])) {
                                         <tr>
                                             <form action="authors.php" method="POST">
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['id'] ?></td>
-                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $authors[$i]['name'] ?></td>
+                                                <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo $edit == true ? '<input class="border-1 rounded-md border-purple-600 p-2" type="text" name="author" placeholder="Author">' : $authors[$i]['name'] ?></td>
                                                 <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0"><?php echo getTotalBookWritten($authors[$i]['id'], $pdo) ?></td>
                                                 <td class="relative py-4 pr-4 pl-3 text-right text-sm whitespace-nowrap sm:pr-0">
                                                 <th scope="col" class="relative py-3.5 pr-0 pl-3">

@@ -12,7 +12,7 @@ function updateBook($connect)
   $author = htmlspecialchars($_GET['author']);
   $category = htmlspecialchars($_GET['category']);
 
-  $stmt = $connect->prepare("UPDATE book SET title = :title, author = :author, category = :category WHERE id = :id");
+  $stmt = $connect->prepare("UPDATE books SET title = :title, author = :author, category = :category WHERE id = :id");
   $stmt->bindParam(":id", $id);
   $stmt->bindParam(":title", $title);
   $stmt->bindParam(":author", $author);
