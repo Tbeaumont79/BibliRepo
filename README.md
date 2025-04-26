@@ -8,6 +8,8 @@ This project is a simple web app to manage books and authors. It is a CRUD (Crea
 
 Why i choose to use Vite ? First for the Developper Experience Vite has the HMR, and also i've used it to run tailwind on my project. It could be usefull to install other plugins in the future.
 
+For more info on how to use Vite with php, i've written an article on my blog : [Using Vite with PHP](https://thibaultbeaumont.dev/en-US/blog/en/php-vite-post)
+
 ### Project architecture :
 
 ```
