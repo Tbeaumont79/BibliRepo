@@ -69,7 +69,7 @@ it will start a server on port 5173.
 in the databases folder you can find the database file `biblio.sql`, you can import it with :
 
 ```
-mysql -u root -p < biblio.sql
+mysql -u root < biblio.sql
 ```
 
 ### How to access to the Admin Panel ?
